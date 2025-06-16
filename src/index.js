@@ -50,8 +50,12 @@ const app = express()
        await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`)
        app.on("error",(error)=>{
         console.log("ERROR")
-        throw err
+        throw error
        })
+    app.listen(process.env.PORT,() =>{
+       console.log(`App is listing on port ${process.env.PORT}`) 
+       } )
+
     } catch (error) {
         console.log("ERROR",error);
         throw err
