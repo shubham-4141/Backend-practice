@@ -33,26 +33,35 @@ const registerUser = asyncHandler( async(req ,res)=>{
         
     }
     
-    const exitedUser = User.findOne({
+    const existedUser = await User.findOne({
         //%or: se kayi sare fields ek sath check kr skte hai
         $or:[{username}, {email}]
     })
 
-    if(exitedUser){
+    if(existedUser){
         throw new ApiError(409,"User with email or username already exists ")
     }
+    console.log(res.files);
+    
 
-   const avatarLoacalPath = req.files?.avatar[0]?.path;
+   const avatarLocalPath = req.files?.avatar[0]?.path;
    // req.files ko console.log krke dekho jo bhi cnsole.log krke dekhna chiahiye for better understandig
-   const coverImageLoacalPath = req.files?.coverImage[0]?.path;
+   const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
-   if(!avatarLoacalPath){
+
+    // let coverImageLocalPath;
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageLocalPath = req.files.coverImage[0].path
+    // }
+    
+
+   if(!avatarLocalPath){
     throw new ApiError(400,"Avatar file is required")
     
    }
 
-   const avatar = await uploadOnCloudinary(avatarLoacalPath)
-   const coverImage = await uploadOnCloudinary(coverImageLoacalPath)
+   const avatar = await uploadOnCloudinary(avatarLocalPath)
+   const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
    if(!avatar){
      throw new ApiError(400,"Avatar file is required")
