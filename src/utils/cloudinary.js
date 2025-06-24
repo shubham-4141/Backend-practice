@@ -1,12 +1,11 @@
 import {v2 as cloudinary} from "cloudinary"
-import { log } from "console";
-import { response } from "express";
+// import { response } from "express";
 import fs from "fs"
 
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-  api_key:process.env.CLOUDINARY_API_KEY , 
-  api_secret:process.env.CLOUDINARY_API_SECRET,
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
 //   secure_distribution: 'mydomain.com',
 //   upload_prefix: 'myprefix.com'
 });
@@ -17,11 +16,12 @@ const uploadOnCloudinary = async (localFilePath) => {
     try {
         if(!localFilePath) return null
         // upload the file on cloudinary
-      response = await cloudinary.uploader.upload(localFilePath,{
+     const response = await cloudinary.uploader.upload(localFilePath,{
             resource_type:"auto"
         })
         //file has been uploaded successfull
-        console.log("file is uploaded on cloudinary",response.url);
+        // console.log("file is uploaded on cloudinary",response.url);
+        fs.unlinkSync(localFilePath)
         return response
         
     } catch (error) {
@@ -52,3 +52,37 @@ export {uploadOnCloudinary}
 //   overwrite: true, 
 //   notification_url: "https://mysite.example.com/notify_endpoint"})
 // .then(result=>console.log(result));
+
+
+
+
+//// ye code chatgpt ka hai jisse error resolve hua hai
+
+// import { v2 as cloudinary } from "cloudinary";
+// import fs from "fs";
+
+// cloudinary.config({ 
+//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+//   api_key: process.env.CLOUDINARY_API_KEY, 
+//   api_secret: process.env.CLOUDINARY_API_SECRET
+// });
+
+// const uploadOnCloudinary = async (localFilePath) => {
+//   try {
+//     if (!localFilePath) return null;
+
+//     const uploadResult = await cloudinary.uploader.upload(localFilePath, {
+//       resource_type: "auto"
+//     });
+
+//     console.log("✅ Uploaded to Cloudinary:", uploadResult.url);
+//     return uploadResult;
+
+//   } catch (error) {
+//     fs.unlinkSync(localFilePath); // clean up
+//     console.error("❌ Cloudinary upload failed:", error);
+//     return null;
+//   }
+// };
+
+// export { uploadOnCloudinary };
